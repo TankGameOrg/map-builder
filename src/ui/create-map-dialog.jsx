@@ -1,6 +1,6 @@
 import "./create-map-dialog.css";
 import { useState } from "preact/hooks";
-import { getAllVersions, getGameVersion } from "../builder-config/index.js";
+import { getAllVersions } from "../builder-config/index.js";
 import { createEmptyFileData } from "tank_game_ui/drivers/game-file-data.js";
 import { WebGameFile } from "../drivers/game-file-web.js";
 import { deepClone } from "tank_game_ui/utils.js";

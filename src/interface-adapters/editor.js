@@ -22,7 +22,7 @@ class AttributeEditor {
             const newEntity = new Entity({
                 type: newType,
                 position: entity.position,
-                attributes: deepClone(builderEntitiyConfig.defaultAttributes),
+                attributes: deepClone(builderEntitiyConfig?.defaultAttributes || {}),
             });
 
             state = this._modifyEntity(state, newEntity);
