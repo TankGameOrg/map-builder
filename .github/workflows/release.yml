@@ -1,0 +1,41 @@
+name: Build and publish map builder
+
+on:
+  push:
+    tags:
+      - v*
+
+jobs:
+  # testing:
+  #   name: Tests
+  #   uses: TankGameOrg/map-builder/.github/workflows/testing.yml@main
+
+  build-and-publish-site:
+    # needs:
+    #   - testing
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write      # to deploy to Pages
+      id-token: write   # to verify the deployment originates from an appropriate source
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Install dependencies
+        run: npm install
+      - name: Build site
+        run: PUBLIC_PATH=/map-builder/ npm run build
+      - name: Bundle artifacts
+        run: tar -cvf ${{ runner.temp }}/site.tar -C dist/ .
+      - name: Upload artifact
+        id: upload-artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: map-builder-deployment
+          path: ${{ runner.temp }}/site.tar
+          retention-days: 1
+          if-no-files-found: error
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+        with:
+          artifact_name: map-builder-deployment

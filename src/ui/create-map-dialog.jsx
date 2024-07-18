@@ -5,6 +5,7 @@ import { createEmptyFileData } from "tank_game_ui/drivers/game-file-data.js";
 import { WebGameFile } from "../drivers/game-file-web.js";
 import { deepClone } from "tank_game_ui/utils.js";
 import Entity from "tank_game_ui/game/state/board/entity.js";
+import { getBuilderConfig } from "../builder-config/index.js";
 
 function createDefaultMetaEntities(builderConfig) {
     let metaEntities = {};
