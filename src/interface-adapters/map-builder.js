@@ -34,7 +34,7 @@ export function mapBuilderReducer(state, action) {
     }
 
     if(state?.gameSettings === undefined && state?.map?.initialGameState === undefined) {
-        throw new Error("set-map must be called before any other action");
+        return state;
     }
 
     // Clear previous error messages

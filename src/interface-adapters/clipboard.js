@@ -1,5 +1,6 @@
 import Entity from "tank_game_ui/game/state/board/entity.js";
 import { Position } from "tank_game_ui/game/state/board/position.js";
+import { updateEditorOnSelection } from "./editor.js";
 
 
 function determineCanPaste(board, insertPosition, clipboardWidth, clipboardHeight) {
@@ -231,15 +232,17 @@ export function copyPasteReducer(state, action) {
         }
         else {
             const newBoard = state.clipboard.paste(board, lastSelected);
+            const initialGameState = state.map.initialGameState.modify({
+                board: newBoard,
+            });
 
             state = {
                 ...state,
                 map: {
                     ...state.map,
-                    initialGameState: state.map.initialGameState.modify({
-                        board: newBoard,
-                    }),
+                    initialGameState,
                 },
+                editor: updateEditorOnSelection(initialGameState, state.locationSelector.locations, state._builderConfig),
                 // Only allow 1 paste after cutting
                 clipboard: state.clipboard.isCut ? undefined : state.clipboard,
             };

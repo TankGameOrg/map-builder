@@ -64,8 +64,13 @@ export function CreateGameDialog({ open, setOpen, setGameFile, isUnsaved, setIsU
             <div className="map-builder-dialog-backdrop"></div>
             <div className="map-builder-create-dialog centered" onClick={() => setOpen(false)}>
                 <div className="map-builder-create-dialog-content" onClick={e => e.stopPropagation()}>
-                    <form onSubmit={createGame}>
+                    <div className="map-builder-title-bar">
                         <h2>Create Map</h2>
+                        <div>
+                            <button onClick={() => setOpen(false)}>Close</button>
+                        </div>
+                    </div>
+                    <form onSubmit={createGame}>
                         <div className="map-builder-dialog-body">
                             <p>
                                 <label>

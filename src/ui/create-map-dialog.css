@@ -43,3 +43,11 @@
 .create-overwrite-warning {
     color: orange;
 }
+
+.map-builder-title-bar {
+    display: flex;
+}
+
+.map-builder-title-bar h2 {
+    flex-grow: 1;
+}

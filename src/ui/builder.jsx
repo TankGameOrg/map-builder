@@ -11,13 +11,14 @@ import { ErrorMessage } from "tank_game_ui/ui/error_message.jsx";
 import { CreateGameDialog } from "./create-map-dialog.jsx";
 import { MapBuilderEditor } from "./editor.jsx";
 
-function useMapBuilderKeyBinds(dispatch, loadFile, saveChanges) {
+function useMapBuilderKeyBinds(dispatch, loadFile, saveChanges, setCreateGameDialogOpen) {
     useGlobalKeyHandler((e) => {
         if(e.ctrlKey && e.keyCode == KEY_O) {
             e.preventDefault();
             loadFile();
         }
         else if(e.keyCode == ESCAPE) {
+            setCreateGameDialogOpen(false);
             dispatch(clearSelection());
         }
         else if(e.keyCode == DELETE) {
@@ -113,7 +114,7 @@ export function MapBuilder({ debug }) {
         return isUnsaved ? "You have unsaved changes save them before closing the window" : "";
     }, [isUnsaved]);
 
-    useMapBuilderKeyBinds(dispatch, loadFile, saveChanges);
+    useMapBuilderKeyBinds(dispatch, loadFile, saveChanges, setCreateGameDialogOpen);
 
     const toolBarButtons = (
         <>
