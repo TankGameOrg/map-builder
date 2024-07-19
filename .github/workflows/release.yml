@@ -6,13 +6,13 @@ on:
       - v*
 
 jobs:
-  # testing:
-  #   name: Tests
-  #   uses: TankGameOrg/map-builder/.github/workflows/testing.yml@main
+  testing:
+    name: Tests
+    uses: TankGameOrg/map-builder/.github/workflows/testing.yml@main
 
   build-and-publish-site:
-    # needs:
-    #   - testing
+    needs:
+      - testing
     runs-on: ubuntu-latest
     permissions:
       pages: write      # to deploy to Pages
