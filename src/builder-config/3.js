@@ -44,4 +44,14 @@ export const builderConfigV3 = {
         maxWidth: 26,
         maxHeight: 26,
     },
+    player: {
+        attributes: {
+            name: { type: "string", allowEmpty: false },
+            type: { type: "string", oneOf: ["tank", "concilor", "senator"] },
+        },
+        defaultAttributes: {
+            name: "Unnamed Player",
+            type: "tank",
+        },
+    },
 };

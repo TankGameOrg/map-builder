@@ -2,6 +2,7 @@ import Entity from "tank_game_ui/game/state/board/entity.js";
 import { Position } from "tank_game_ui/game/state/board/position.js";
 import { deepClone, prettyifyName } from "tank_game_ui/utils.js";
 import { updateClipboardOnModify } from "./clipboard.js";
+import Players from "tank_game_ui/game/state/players/players.js";
 
 class AttributeEditor {
     constructor({ entities, builderEntitiyConfig, cloneState, modifyEntity }) {
@@ -70,7 +71,7 @@ class AttributeEditor {
     }
 }
 
-export function updateEditorOnSelection({board, metaEntities}, locations, builderConfig) {
+export function updateEditorOnSelection({board, metaEntities, players}, locations, builderConfig) {
     const positions = locations.map(location => new Position(location));
     const entity = positions.length > 0 ? board.getEntityAt(positions[0]) : undefined;
     const floorTile = positions.length > 0 ? board.getFloorTileAt(positions[0]) : undefined;
@@ -97,6 +98,26 @@ export function updateEditorOnSelection({board, metaEntities}, locations, builde
                 }),
             }),
         };
+    }
+
+    let playerEditor = [];
+    players = players.getAllPlayers();
+    for(let i = 0; i < players.length; ++i) {
+        const player = players[i];
+        playerEditor.push(new AttributeEditor({
+            entities: [player],
+            builderEntitiyConfig: builderConfig.player,
+            modifyEntity: (map, player) => ({
+                ...map,
+                initialGameState: map.initialGameState.modify({
+                    players: new Players([
+                        ...map.initialGameState.players.getAllPlayers().slice(0, i),
+                        player,
+                        ...map.initialGameState.players.getAllPlayers().slice(i + 1),
+                    ]),
+                }),
+            }),
+        }));
     }
 
     const cloneBoard = (map) => ({
@@ -134,6 +155,7 @@ export function updateEditorOnSelection({board, metaEntities}, locations, builde
             }),
         },
         metaEntities: editorMetaEntities,
+        players: playerEditor,
     };
 }
 
@@ -245,6 +267,27 @@ export function editEntityReducer(state, action) {
 
         return state;
     }
+    else if(action.type == "set-player-attribute") {
+        const playerEditor = state.editor.players[action.playerIndex];
+        const [map, attributeEditor] = playerEditor.editAttribute(state.map, action.name, action.value);
+
+        state = {
+            ...state,
+            map: map,
+            editor: {
+                ...state.editor,
+                players: [
+                    ...state.editor.players.slice(0, action.playerIndex),
+                    attributeEditor,
+                    ...state.editor.players.slice(action.playerIndex + 1),
+                ],
+            }
+        };
+
+        state.onChange(state.map);
+
+        return state;
+    }
 }
 
 
@@ -284,6 +327,18 @@ function makeAttibuteValue(targetConfig, name, value) {
 
         if(hasMax) {
             value = {value, max};
+        }
+
+        return [value, undefined];
+    }
+
+    if(attributeConfig.type == "string") {
+        if(attributeConfig.allowEmpty === false && value.length === 0) {
+            return [undefined, `${prettyifyName(name)} cannot be empty`];
+        }
+
+        if(Array.isArray(attributeConfig.oneOf) && !attributeConfig.oneOf.includes(value)) {
+            return [undefined, `${prettyifyName(name)} must be one of the following: ${attributeConfig.oneOf.join(", ")}`];
         }
 
         return [value, undefined];

@@ -65,6 +65,7 @@ export const clearSelection = () => selectLocation(undefined, "clear");
 export const setMetaEntityAttibute = (entityName, name, value) => ({ type: "set-meta-entity-attribute", entityName, name, value });
 export const setSelectedAttibute = (targetType, name, value) => ({ type: "set-selected-attribute", targetType, name, value });
 export const setSelectedEntityType = (targetType, entityType) => ({ type: "set-selected-entity-type", targetType, entityType });
+export const setPlayerAttribute = (playerIndex, name, value) => ({ type: "set-player-attribute", playerIndex, name, value });
 export const resizeBoard = (resizeParameters) => ({ type: "resize-board", resizeParameters });
 export const cut = () => ({ type: "cut" });
 export const copy = () => ({ type: "copy" });
