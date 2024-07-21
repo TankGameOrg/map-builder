@@ -65,13 +65,21 @@ function EditAttributes({ attributeEditor, updateAttribute }) {
                     (key, e) => updateAttribute(attributeName, { ...value, [key]: e.target.value }) :
                     e => updateAttribute(attributeName, e.target.value);
 
-                let editor = <input value={value} onInput={onInput}/>;
+                let editor = <input value={value} onInput={onInput} onKeyDown={e => e.stopPropagation()}/>;
                 if(hasMax) {
                     editor = (
                         <div>
-                            <input value={value.value} onInput={e => onInput("value", e)} style={{ width: "100px" }}/>
+                            <input
+                                value={value.value}
+                                onInput={e => onInput("value", e)}
+                                style={{ width: "100px" }}
+                                onKeyDown={e => e.stopPropagation()}/>
                             <span> / </span>
-                            <input value={value.max} onInput={e => onInput("max", e)} style={{ width: "100px" }}/>
+                            <input
+                                value={value.max}
+                                onInput={e => onInput("max", e)}
+                                style={{ width: "100px" }}
+                                onKeyDown={e => e.stopPropagation()}/>
                         </div>
                     );
                 }

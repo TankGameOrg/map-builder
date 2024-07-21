@@ -77,7 +77,7 @@ export function MapBuilderEditor({ mapBuilderState, toolBarButtons, isUnsaved, c
                             <button onClick={() => dispatch(resizeBoard({ left: -1 }))} disabled={!mapBuilderState?.resizeBoard?.canShrinkX}>Shrink</button>
                         </div>
                         <GameBoard
-                            board={mapBuilderState?.map?.initialGameState?.board}
+                            gameState={mapBuilderState?.map?.initialGameState}
                             config={versionConfig}
                             canSubmitAction={false}
                             locationSelector={mapBuilderState.locationSelector}

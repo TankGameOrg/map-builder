@@ -47,7 +47,7 @@ export const builderConfigV3 = {
     player: {
         attributes: {
             name: { type: "string", allowEmpty: false },
-            type: { type: "string", oneOf: ["tank", "concilor", "senator"] },
+            type: { type: "string", oneOf: ["tank", "councilor", "senator"] },
         },
         defaultAttributes: {
             name: "Unnamed Player",

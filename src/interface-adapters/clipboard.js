@@ -200,7 +200,8 @@ export class Clipboard {
  */
 export function copyPasteReducer(state, action) {
     const {board} = state.map.initialGameState;
-    const lastSelected = new Position(state.locationSelector.lastSelected);
+    const lastSelected = state.locationSelector.lastSelected !== undefined ?
+        new Position(state.locationSelector.lastSelected) : undefined;
 
     if(action.type == "copy" || action.type == "cut") {
         if(state.locationSelector.locations !== undefined && state.locationSelector.locations.length > 0) {
