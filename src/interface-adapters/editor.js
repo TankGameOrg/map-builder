@@ -12,6 +12,20 @@ class AttributeEditor {
         this.builderEntitiyConfig = builderEntitiyConfig;
         this.attributes = entities.length > 0 ? deepClone(entities[0].attributes) : undefined;
         this.attributeErrors = {};
+        this._initializeAttributeErrors();
+    }
+
+    _initializeAttributeErrors() {
+        if(this.attributes === undefined) return;
+
+        for(const attributeName of Object.keys(this.attributes)) {
+            const [entityValue, errorMessage] = makeAttibuteValue(this.builderEntitiyConfig, attributeName, this.attributes[attributeName]);
+            this.attributeErrors[attributeName] = errorMessage;
+
+            if(entityValue !== undefined) {
+                this.attributes[attributeName] = entityValue;
+            }
+        }
     }
 
     changeType(state, newType, builderEntitiyConfig) {

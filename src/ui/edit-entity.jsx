@@ -56,7 +56,12 @@ function EditAttributes({ attributeEditor, updateAttribute }) {
     return (
         <>
             {Object.keys(attributeEditor.attributes).map(attributeName => {
-                const description = attributeEditor.entityBuilderConfig?.description;
+                const builderAttributeConfig = attributeEditor.builderEntitiyConfig?.attributes?.[attributeName];
+                if(builderAttributeConfig?.hidden) {
+                    return;
+                }
+
+                const description = builderAttributeConfig?.description;
                 const errorMessage = attributeEditor.attributeErrors[attributeName];
                 const value = attributeEditor.attributes[attributeName];
                 const hasMax = value?.value !== undefined && value?.max !== undefined;
