@@ -103,6 +103,7 @@ export function EditAttributes({ attributeEditor, updateAttribute }) {
 }
 
 export function MetaEntityEditor({ mapBuilderState, dispatch }) {
+    console.log(mapBuilderState.editor);
     const {metaEntities} = mapBuilderState.editor;
 
     return (

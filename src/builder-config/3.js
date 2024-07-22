@@ -9,6 +9,27 @@ function getLinkableEntities(gameState, player) {
         .filter(entity => entity.type == "tank" && entity.getPlayerRefs().length === 0);
 }
 
+
+function getPlayersToShuffle(gameState) {
+    return gameState.players.getAllPlayers().filter(player => {
+        const entities = gameState.getEntitiesByPlayer(player);
+
+        // Multiple entities imples councilor, don't touch
+        if(entities.length > 1) return false;
+
+        // No entities we can assign one easily
+        if(entities.length === 0) return true;
+
+        return entities[0].type == "tank";
+    });
+}
+
+function getEntitiesToShuffle(gameState) {
+    return gameState.board.getAllEntities()
+        .filter(entity => entity.type == "tank" && entity.attributes.health !== undefined);
+}
+
+
 export const builderConfigV3 = {
     metaEntities: {
         council: {
@@ -66,4 +87,6 @@ export const builderConfigV3 = {
             type: "tank",
         },
     },
+    getPlayersToShuffle,
+    getEntitiesToShuffle,
 };

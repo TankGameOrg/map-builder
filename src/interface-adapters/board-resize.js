@@ -1,4 +1,5 @@
 import { Position } from "tank_game_ui/game/state/board/position.js";
+import { updateEditorOnSelection } from "./editor.js";
 
 export function resizeBoardReducer(state, action) {
     if(action.type == "resize-board") {
@@ -11,7 +12,7 @@ export function resizeBoardReducer(state, action) {
             state.locationSelector.locations
                 .map(position => remapPosition(position))
                 .filter(position => position !== undefined) :
-            undefined;
+            [];
 
         const lastSelected = state.locationSelector.lastSelected !== undefined ?
             remapPosition(state.locationSelector.lastSelected) :
@@ -20,14 +21,16 @@ export function resizeBoardReducer(state, action) {
         // Update the clipboard position to fit on the resized board
         const clipboard = state?.clipboard?.remapPositions?.(newBoard, lastSelected !== undefined ? new Position(lastSelected): undefined, remapPosition);
 
+        const initialGameState = state.map.initialGameState.modify({
+            board: newBoard,
+        });
+
         state = {
             ...state,
             clipboard,
             map: {
                 ...state.map,
-                initialGameState: state.map.initialGameState.modify({
-                    board: newBoard,
-                }),
+                initialGameState,
             },
             locationSelector: {
                 ...state.locationSelector,
@@ -38,7 +41,7 @@ export function resizeBoardReducer(state, action) {
             },
             resizeBoard: checkCanResize(newBoard, state._builderConfig),
             // Reset the editor if the location we're editing is removed
-            editor: locations?.length > 0 ? state.editor : {},
+            editor: updateEditorOnSelection(initialGameState, locations, state._builderConfig),
         };
 
         state.onChange(state.map);

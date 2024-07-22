@@ -2,10 +2,10 @@ import Entity from "tank_game_ui/game/state/board/entity.js";
 import { Position } from "tank_game_ui/game/state/board/position.js";
 import { deepClone, prettyifyName } from "tank_game_ui/utils.js";
 import { updateClipboardOnModify } from "./clipboard.js";
-import Players from "tank_game_ui/game/state/players/players.js";
-import Player from "tank_game_ui/game/state/players/player.js";
+import { buildPlayerEditors, makePlayerEditor } from "./player-tools.js";
 
-class AttributeEditor {
+
+export class AttributeEditor {
     constructor({ entities, builderEntitiyConfig, cloneState, modifyEntity }) {
         this._entities = entities;
         this._modifyEntity = modifyEntity;
@@ -86,26 +86,6 @@ class AttributeEditor {
     }
 }
 
-function makePlayerEditor(playerIndex, player, builderConfig) {
-    return {
-        playerRef: player.asRef(),
-        playerEditor: new AttributeEditor({
-            entities: [player],
-            builderEntitiyConfig: builderConfig.player,
-            modifyEntity: (map, player) => ({
-                ...map,
-                initialGameState: map.initialGameState.modify({
-                    players: new Players([
-                        ...map.initialGameState.players.getAllPlayers().slice(0, playerIndex),
-                        player,
-                        ...map.initialGameState.players.getAllPlayers().slice(playerIndex + 1),
-                    ]),
-                }),
-            }),
-        })
-    };
-}
-
 export function updateEditorOnSelection({board, metaEntities, players}, locations, builderConfig) {
     const positions = locations.map(location => new Position(location));
     const entity = positions.length > 0 ? board.getEntityAt(positions[0]) : undefined;
@@ -133,12 +113,6 @@ export function updateEditorOnSelection({board, metaEntities, players}, location
                 }),
             }),
         };
-    }
-
-    let playerEditor = [];
-    players = players.getAllPlayers();
-    for(let i = 0; i < players.length; ++i) {
-        playerEditor.push(makePlayerEditor(i, players[i], builderConfig));
     }
 
     const cloneBoard = (map) => ({
@@ -176,7 +150,7 @@ export function updateEditorOnSelection({board, metaEntities, players}, location
             }),
         },
         metaEntities: editorMetaEntities,
-        players: playerEditor,
+        players: buildPlayerEditors(players, builderConfig),
     };
 }
 
@@ -282,80 +256,6 @@ export function editEntityReducer(state, action) {
                     },
                 },
             }
-        };
-
-        state.onChange(state.map);
-
-        return state;
-    }
-    else if(action.type == "set-player-attribute") {
-        const {playerEditor} = state.editor.players[action.playerIndex];
-        const [map, attributeEditor] = playerEditor.editAttribute(state.map, action.name, action.value);
-
-        state = {
-            ...state,
-            map: map,
-            editor: {
-                ...state.editor,
-                players: [
-                    ...state.editor.players.slice(0, action.playerIndex),
-                    {
-                        ...state.editor.players[action.playerIndex],
-                        playerEditor: attributeEditor,
-                    },
-                    ...state.editor.players.slice(action.playerIndex + 1),
-                ],
-            }
-        };
-
-        state.onChange(state.map);
-
-        return state;
-    }
-    else if(action.type == "add-player") {
-        const builderConfig = state._builderConfig;
-        const newPlayer = new Player(deepClone(builderConfig.player.defaultAttributes));
-
-        state = {
-            ...state,
-            map: {
-                ...state.map,
-                initialGameState: state.map.initialGameState.modify({
-                    players: new Players([
-                        ...state.map.initialGameState.players.getAllPlayers(),
-                        newPlayer,
-                    ]),
-                }),
-            },
-            editor: {
-                ...state.editor,
-                players: [
-                    ...state.editor.players,
-                    makePlayerEditor(state.editor.players.length, newPlayer, builderConfig),
-                ],
-            }
-        };
-
-        state.onChange(state.map);
-
-        return state;
-    }
-    else if(action.type == "link-entity-to-player") {
-        let newEntity = action.entity.clone();
-        newEntity.addPlayer(action.player);
-
-        // TODO: Support linking to meta entities
-        let newBoard = state.map.initialGameState.board.clone();
-        newBoard.setEntity(newEntity);
-
-        state = {
-            ...state,
-            map: {
-                ...state.map,
-                initialGameState: state.map.initialGameState.modify({
-                    board: newBoard,
-                }),
-            },
         };
 
         state.onChange(state.map);

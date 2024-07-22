@@ -1,5 +1,5 @@
 import { useState } from "preact/hooks";
-import { addPlayer, linkEntityToPlayer, setPlayerAttribute } from "../interface-adapters/map-builder.js";
+import { addPlayer, linkEntityToPlayer, setPlayerAttribute, shufflePlayers } from "../interface-adapters/map-builder.js";
 import { EditAttributes } from "./edit-entity.jsx";
 
 
@@ -30,6 +30,7 @@ export function PlayersEditor({ mapBuilderState, dispatch }) {
             <div key="add-player">
                 <hr/>
                 <button onClick={() => dispatch(addPlayer())}>Add player</button>
+                <button onClick={() => dispatch(shufflePlayers())}>Shuffle Players</button>
             </div>
         </>
     );
@@ -75,7 +76,7 @@ function EditPlayerLinks({ mapBuilderState, dispatch, playerRef, builderConfig }
                             Link
                         </button>
                     </>
-                ) : "Nothing avilable to link to"}
+                ) : undefined}
             </p>
         </>
     );

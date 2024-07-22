@@ -3,6 +3,7 @@ import { copyPasteReducer } from "./clipboard.js";
 import { updateSelectionAndEditorReducer } from "./selection.js";
 import { editEntityReducer, updateEditorOnSelection } from "./editor.js";
 import { checkCanResize, generateAllLocations, resizeBoardReducer } from "./board-resize.js";
+import { playerToolsReducer } from "./player-tools.js";
 
 const TARGET_TYPES = ["entity", "floorTile"];
 
@@ -52,6 +53,9 @@ export function mapBuilderReducer(state, action) {
     newState = copyPasteReducer(state, action);
     if(newState !== undefined) return newState;
 
+    newState = playerToolsReducer(state, action);
+    if(newState !== undefined) return newState;
+
     throw new Error(`Action type ${action.type} is not valid`);
 }
 
@@ -72,6 +76,7 @@ export const copy = () => ({ type: "copy" });
 export const paste = () => ({ type: "paste" });
 export const addPlayer = () => ({ type: "add-player" });
 export const linkEntityToPlayer = (entity, player) => ({ type: "link-entity-to-player", entity, player });
+export const shufflePlayers = () => ({ type: "shuffle-players" });
 
 
 export function deleteSelected(dispatch) {
