@@ -2,9 +2,10 @@ import { useState } from "preact/hooks";
 import { clearSelection, copy, cut, deleteSelected, paste, resizeBoard, selectLocation } from "../interface-adapters/map-builder.js";
 import { SAVE_BUTTON_TEXT } from "../drivers/game-file-web.js";
 import { Tab, TabContent, Tabs } from "tank_game_ui/ui/generic/tabs.jsx";
-import { EditSpace, MetaEntityEditor, PlayersEditor } from "./edit-entity.jsx";
+import { EditSpace, MetaEntityEditor } from "./edit-entity.jsx";
 import { AppContent } from "tank_game_ui/ui/app-content.jsx";
 import { GameBoard } from "tank_game_ui/ui/game_state/board.jsx";
+import { PlayersEditor } from "./player-editor.jsx";
 
 
 export function MapBuilderEditor({ mapBuilderState, toolBarButtons, isUnsaved, createGameDialog, dispatch, saveChanges, versionConfig, debug, builderConfig }) {

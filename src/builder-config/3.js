@@ -1,3 +1,14 @@
+function getLinkableEntities(gameState, player) {
+    const controlledEntities = gameState.getEntitiesByPlayer(player);
+
+    if(controlledEntities.length > 0 || player.type !== "tank") {
+        return [];
+    }
+
+    return gameState.board.getAllEntities()
+        .filter(entity => entity.type == "tank" && entity.getPlayerRefs().length === 0);
+}
+
 export const builderConfigV3 = {
     metaEntities: {
         council: {
@@ -45,6 +56,7 @@ export const builderConfigV3 = {
         maxHeight: 26,
     },
     player: {
+        getLinkableEntities,
         attributes: {
             name: { type: "string", allowEmpty: false },
             type: { type: "string", oneOf: ["tank", "councilor", "senator"], hidden: true },

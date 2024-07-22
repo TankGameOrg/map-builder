@@ -70,6 +70,8 @@ export const resizeBoard = (resizeParameters) => ({ type: "resize-board", resize
 export const cut = () => ({ type: "cut" });
 export const copy = () => ({ type: "copy" });
 export const paste = () => ({ type: "paste" });
+export const addPlayer = () => ({ type: "add-player" });
+export const linkEntityToPlayer = (entity, player) => ({ type: "link-entity-to-player", entity, player });
 
 
 export function deleteSelected(dispatch) {

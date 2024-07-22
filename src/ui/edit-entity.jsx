@@ -1,5 +1,5 @@
 import "./edit-entity.css";
-import { setMetaEntityAttibute, setPlayerAttribute, setSelectedAttibute, setSelectedEntityType } from "../interface-adapters/map-builder.js";
+import { setMetaEntityAttibute, setSelectedAttibute, setSelectedEntityType } from "../interface-adapters/map-builder.js";
 import { prettyifyName } from "tank_game_ui/utils.js";
 import { KEY_S } from "tank_game_ui/ui/generic/global-keybinds.js";
 
@@ -52,7 +52,7 @@ function EditEntity({ dispatch, targetType, mapBuilderState }) {
     );
 }
 
-function EditAttributes({ attributeEditor, updateAttribute }) {
+export function EditAttributes({ attributeEditor, updateAttribute }) {
     return (
         <>
             {Object.keys(attributeEditor.attributes).map(attributeName => {
@@ -119,30 +119,6 @@ export function MetaEntityEditor({ mapBuilderState, dispatch }) {
                         <h2>{prettyifyName(name)}</h2>
                         <EditAttributes
                             attributeEditor={attributeEditor}
-                            updateAttribute={updateAttribute}></EditAttributes>
-                    </div>
-                );
-            })}
-        </>
-    );
-}
-
-
-export function PlayersEditor({ mapBuilderState, dispatch }) {
-    const {players} = mapBuilderState.editor;
-
-    return (
-        <>
-            {players.map((playerEditor, index) => {
-                const updateAttribute = (attributeName, value) => {
-                    dispatch(setPlayerAttribute(index, attributeName, value));
-                };
-
-                return (
-                    <div key={index}>
-                        {index > 0 ? <hr/> : undefined}
-                        <EditAttributes
-                            attributeEditor={playerEditor}
                             updateAttribute={updateAttribute}></EditAttributes>
                     </div>
                 );
