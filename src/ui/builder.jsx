@@ -130,12 +130,17 @@ export function MapBuilder({ debug }) {
         setIsUnsaved={setIsUnsaved}
         isUnsaved={isUnsaved}></CreateGameDialog>;
 
-    if(error !== undefined) {
+    let versionError;
+    if(gameVersion !== undefined && (builderConfig === undefined || versionConfig === undefined)) {
+        versionError = `Game version ${gameVersion} is not supporred by the map builder`;
+    }
+
+    if(error !== undefined || versionError !== undefined) {
         return <AppContent>
             <div className="map-builder-toolbar">
                 {toolBarButtons}
             </div>
-            <ErrorMessage error={error}></ErrorMessage>
+            <ErrorMessage error={error || versionError}></ErrorMessage>
             {createGameDialog}
         </AppContent>;
     }

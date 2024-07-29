@@ -1,7 +1,11 @@
-import { builderConfigV3 } from "./3.js";
-import { builderConfigV4 } from "./4.js";
+import { builderConfigV3 } from "./default-v3.js";
+import { builderConfigV4 } from "./default-v4.js";
 
 let configsForVersion = new Map();
+configsForVersion.set("default-v3", builderConfigV3);
+configsForVersion.set("default-v4", builderConfigV4);
+
+// TODO: Remove after rename is complete
 configsForVersion.set("3", builderConfigV3);
 configsForVersion.set("4", builderConfigV4);
 

@@ -1,4 +1,4 @@
-import { builderConfigV3 } from "./3.js";
+import { builderConfigV3 } from "./default-v3.js";
 
 export const builderConfigV4 = {
     ...builderConfigV3,
