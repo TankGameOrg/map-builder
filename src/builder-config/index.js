@@ -5,10 +5,6 @@ let configsForVersion = new Map();
 configsForVersion.set("default-v3", builderConfigV3);
 configsForVersion.set("default-v4", builderConfigV4);
 
-// TODO: Remove after rename is complete
-configsForVersion.set("3", builderConfigV3);
-configsForVersion.set("4", builderConfigV4);
-
 export function getBuilderConfig(name) {
     return configsForVersion.get(name);
 }

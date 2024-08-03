@@ -42,10 +42,12 @@ async function openFileFsApi() {
     });
 
     const contents = await (await fileHandle.getFile()).text();
+    const {fileData} = loadFromRaw(JSON.parse(contents));
+
 
     return new WebGameFile(
         fileHandle,
-        loadFromRaw(JSON.parse(contents)),
+        fileData,
     );
 }
 
@@ -95,9 +97,11 @@ function openFileElement() {
             reader.readAsText(file, "UTF-8");
 
             reader.addEventListener("load", e => {
+                const {fileData} = loadFromRaw(JSON.parse(e.target.result));
+
                 resolve(new WebGameFile(
                     file.name,
-                    loadFromRaw(JSON.parse(e.target.result)),
+                    fileData,
                 ));
             });
 
@@ -197,10 +201,12 @@ export function restorePreviousSession() {
         const rawSession = localStorage.getItem("previousSession");
         if(rawSession === null || rawSession === undefined) return;
 
-        const {fileData, fileHandle, unsaved} = JSON.parse(rawSession);
+        let {fileData, fileHandle, unsaved} = JSON.parse(rawSession);
+
+        fileData = loadFromRaw(fileData).fileData;
 
         return {
-            gameFile: new WebGameFile(fileHandle, loadFromRaw(fileData)),
+            gameFile: new WebGameFile(fileHandle, fileData),
             unsaved,
         };
     }

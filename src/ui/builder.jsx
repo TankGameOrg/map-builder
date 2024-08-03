@@ -90,8 +90,11 @@ export function MapBuilder({ debug }) {
 
     const gameVersion = gameFile?.getData?.()?.gameVersion;
 
+    // Build config is required to initialize mapBuilderState so we initialize that from the gameFile but
+    // versionConfig is directly used for rendering so we want to to always be in sync with the mapBuilderState
     const builderConfig = gameVersion !== undefined ? getBuilderConfig(gameVersion) : undefined;
-    const versionConfig = gameVersion !== undefined ? getGameVersion(gameVersion) : undefined;
+    const versionConfig = mapBuilderState?.map?.gameVersion !== undefined ?
+        getGameVersion(mapBuilderState?.map?.gameVersion) : undefined;
 
     useEffect(() => {
         if(gameFile && builderConfig) {
