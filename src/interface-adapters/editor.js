@@ -173,7 +173,7 @@ function areEntriesCompatible(positions, getEntityAt) {
         for(let j = 0; j < attributeKeys.length; ++j) {
             const key = attributeKeys[j];
             const firstKey = firstAttributeKeys[j];
-            if(key != firstKey || entity.attributes[key] != firstEntity.attributes[key]) {
+            if(key != firstKey || !compareAttributes(entity.attributes[key], firstEntity.attributes[key])) {
                 return false;
             }
         }
@@ -182,6 +182,13 @@ function areEntriesCompatible(positions, getEntityAt) {
     return true;
 }
 
+function compareAttributes(attribute1, attribute2) {
+    if(attribute1?.max !== undefined && attribute2?.max !== undefined) {
+        return attribute1.value == attribute2.value && attribute1.max == attribute2.max;
+    }
+
+    return attribute1 == attribute2;
+}
 
 export function editEntityReducer(state, action) {
     if(action.type == "set-selected-attribute" || action.type == "set-selected-entity-type") {
