@@ -14,7 +14,7 @@
     "author": "Ryan Ray <ryan314r@gmail.com>",
     "license": "ISC",
     "dependencies": {
-        "tank_game_ui": "github:tankgameorg/ui"
+        "tank_game_ui": "github:tankgameorg/ui#proposed-v5"
     },
     "devDependencies": {
         "@babel/eslint-parser": "^7.24.7",

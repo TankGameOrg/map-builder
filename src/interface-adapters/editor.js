@@ -2,7 +2,7 @@ import Entity from "tank_game_ui/game/state/board/entity.js";
 import { Position } from "tank_game_ui/game/state/board/position.js";
 import { deepClone, prettyifyName } from "tank_game_ui/utils.js";
 import { updateClipboardOnModify } from "./clipboard.js";
-import { buildPlayerEditors, makePlayerEditor } from "./player-tools.js";
+import { buildPlayerEditors } from "./player-tools.js";
 
 
 export class AttributeEditor {
